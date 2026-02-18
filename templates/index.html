@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Brain Tumor Detection</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body {
+    font-family: 'Inter', sans-serif;
+    background:
+        linear-gradient(rgba(5, 15, 30, 0.85), rgba(5, 15, 30, 0.85)),
+        url("static/images/image.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.glass {
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    border-radius: 20px;
+}
+
+.glow-green {
+    box-shadow: 0 0 25px rgba(61, 224, 43, 0.6);
+}
+
+.glow-red {
+    box-shadow: 0 0 25px rgba(239,68,68,0.6);
+}
+</style>
+</head>
+
+<body class="min-h-screen flex flex-col text-white">
+
+<header class="bg-white/10 backdrop-blur-md border-b border-white/20">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+        <h1 class="text-2xl font-semibold">🧠 AI Brain Tumor Detection</h1>
+    </div>
+</header>
+
+<main class="flex-grow flex items-center justify-end px-12">
+
+<div class="glass w-full max-w-5xl p-10 grid grid-cols-2 gap-10">
+
+    <!-- LEFT SIDE - UPLOAD -->
+    <div class="flex flex-col justify-center">
+
+        <h2 class="text-3xl font-bold mb-4">
+            Upload MRI Scan
+        </h2>
+
+        <p class="text-gray-300 mb-6">
+            Our deep learning model detects
+            Glioma, Meningioma, Pituitary Tumor, or No Tumor.
+        </p>
+
+        <input type="file" id="fileInput"
+               accept="image/png, image/jpeg"
+               class="hidden">
+
+        <button onclick="document.getElementById('fileInput').click()"
+        class="bg-blue-600 px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+        Browse File
+        </button>
+
+        <img id="previewImage"
+             class="mt-6 rounded-lg max-h-64 hidden object-contain">
+
+        <button id="analyzeBtn"
+        class="mt-6 bg-green-600 px-6 py-3 rounded-lg hover:bg-green-700 hidden">
+        Analyze Scan
+        </button>
+
+    </div>
+
+    <!-- RIGHT SIDE - RESULT -->
+    <div class="flex flex-col justify-center items-center text-center">
+
+        <div id="loadingSection" class="hidden">
+            <div class="animate-spin rounded-full h-14 w-14 border-t-4 border-blue-500 mb-4"></div>
+            <p>Analyzing MRI scan...</p>
+        </div>
+
+        <div id="predictionDisplay" class="hidden">
+
+            <img id="predictionImage"
+                 class="rounded-2xl max-h-56 mb-4 transition">
+
+            <h3 id="predictionTitle"
+                class="text-2xl font-bold mb-2"></h3>
+
+            <p id="predictionConfidence"
+               class="text-lg text-gray-300"></p>
+
+            <button onclick="resetApp()"
+            class="mt-6 bg-gray-200 text-black px-6 py-2 rounded-lg hover:bg-gray-300">
+            Analyze Another
+            </button>
+
+            <p class="text-xs text-gray-400 mt-4">
+                For research purposes only.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+</main>
+
+<footer class="bg-white/10 backdrop-blur-md border-t border-white/20 text-center py-4 text-sm text-gray-300">
+© 2026 AI Brain Tumor Detection Project
+</footer>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+const previewImage = document.getElementById('previewImage');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const loadingSection = document.getElementById('loadingSection');
+const predictionDisplay = document.getElementById('predictionDisplay');
+const predictionImage = document.getElementById('predictionImage');
+const predictionTitle = document.getElementById('predictionTitle');
+const predictionConfidence = document.getElementById('predictionConfidence');
+
+let selectedFile = null;
+
+fileInput.addEventListener('change', (e) => {
+    selectedFile = e.target.files[0];
+    if (!selectedFile) return;
+
+    previewImage.src = URL.createObjectURL(selectedFile);
+    previewImage.classList.remove('hidden');
+    analyzeBtn.classList.remove('hidden');
+});
+
+analyzeBtn.addEventListener('click', async () => {
+
+    if (!selectedFile) return;
+
+    loadingSection.classList.remove('hidden');
+    predictionDisplay.classList.add('hidden');
+
+    const formData = new FormData();
+    formData.append('image', selectedFile);
+
+    try {
+        const response = await fetch('/api/analyze', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        loadingSection.classList.add('hidden');
+        showPrediction(data);
+
+    } catch (error) {
+        alert("Error analyzing image.");
+        loadingSection.classList.add('hidden');
+    }
+});
+
+function showPrediction(data) {
+
+    predictionDisplay.classList.remove('hidden');
+
+    predictionImage.classList.remove("glow-red");
+    predictionImage.classList.remove("glow-green");
+
+    let imagePath = "";
+
+    if (data.prediction === "Glioma") {
+        imagePath = "/static/images/glioma.png";
+        predictionTitle.className = "text-2xl font-bold text-red-500";
+        predictionImage.classList.add("glow-red");
+    }
+    else if (data.prediction === "Meningioma") {
+        imagePath = "/static/images/meningioma.png";
+        predictionTitle.className = "text-2xl font-bold text-red-500";
+        predictionImage.classList.add("glow-red");
+    }
+    else if (data.prediction === "Pituitary") {
+        imagePath = "/static/images/pituitary.png";
+        predictionTitle.className = "text-2xl font-bold text-red-500";
+        predictionImage.classList.add("glow-red");
+    }
+    else {
+        imagePath = "/static/images/no_tumor.png";
+        predictionTitle.className = "text-2xl font-bold text-green-400";
+        predictionImage.classList.add("glow-green");
+    }
+
+    predictionImage.src = imagePath;
+    predictionTitle.textContent = data.prediction;
+    predictionConfidence.textContent =
+        "Confidence: " + (data.confidence * 100).toFixed(2) + "%";
+}
+
+function resetApp() {
+    selectedFile = null;
+    fileInput.value = "";
+    previewImage.classList.add('hidden');
+    analyzeBtn.classList.add('hidden');
+    predictionDisplay.classList.add('hidden');
+}
+</script>
+
+</body>
+</html>
