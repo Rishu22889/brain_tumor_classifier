@@ -15,6 +15,8 @@ Brain tumors require early and accurate detection. This project builds an AI-bas
 - Pituitary Tumor
 - No Tumor
 
+### Dataset Link - https://drive.google.com/drive/folders/1Hvb9cOEZ5Ti_qpFPAAtjQOKC0IOnZnoz?usp=sharing
+
 The trained PyTorch model is integrated into a modern glass-themed web interface where users can upload MRI images and receive predictions along with confidence scores.
 
 ---
