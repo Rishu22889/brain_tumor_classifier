@@ -41,14 +41,20 @@ body {
 <body class="min-h-screen flex flex-col text-white">
 
 <header class="bg-white/10 backdrop-blur-md border-b border-white/20">
-    <div class="max-w-7xl mx-auto px-6 py-4">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <h1 class="text-2xl font-semibold">🧠 AI Brain Tumor Detection</h1>
+
+        <div class="space-x-6 text-gray-300">
+            <button onclick="showHome()" class="hover:text-white transition">Home</button>
+            <button onclick="showAbout()" class="hover:text-white transition">About</button>
+        </div>
     </div>
 </header>
 
+
 <main class="flex-grow flex items-center justify-end px-12">
 
-<div class="glass w-full max-w-5xl p-10 grid grid-cols-2 gap-10">
+<div id="homeSection" class="glass w-full max-w-5xl p-10 grid grid-cols-2 gap-10">
 
     <!-- LEFT SIDE - UPLOAD -->
     <div class="flex flex-col justify-center">
@@ -91,8 +97,10 @@ body {
 
         <div id="predictionDisplay" class="hidden">
 
-            <img id="predictionImage"
-                 class="rounded-2xl max-h-56 mb-4 transition">
+            <div class="flex justify-center items-center w-full h-64 mb-4">
+                <img id="predictionImage"
+                    class="rounded-2xl max-h-full object-contain transition">
+            </div>
 
             <h3 id="predictionTitle"
                 class="text-2xl font-bold mb-2"></h3>
@@ -116,8 +124,49 @@ body {
 </div>
 </main>
 
+<!-- ABOUT SECTION -->
+<div id="aboutSection" class="hidden px-12 py-20">
+
+    <div class="glass max-w-5xl mx-auto p-10 space-y-6 text-gray-200">
+
+        <h2 class="text-3xl font-bold text-white mb-4">
+            About This Project
+        </h2>
+
+        <p>
+            This AI-based Brain Tumor Detection system uses a deep learning model
+            trained on MRI scans to classify brain images into:
+            Glioma, Meningioma, Pituitary Tumor, or No Tumor.
+        </p>
+
+        <p>
+            The model is built using PyTorch and a pretrained ResNet18
+            architecture with transfer learning. It has been trained
+            and validated on medical MRI datasets to achieve high accuracy.
+        </p>
+
+        <p>
+            The system processes uploaded MRI images, applies the same
+            preprocessing pipeline used during training, and predicts
+            the tumor type along with confidence score.
+        </p>
+
+        <p>
+            ⚠️ Disclaimer: This tool is developed for research and
+            educational purposes only and should not be used as a substitute
+            for professional medical diagnosis.
+        </p>
+
+        <p class="text-sm text-gray-400 mt-6">
+            Developed by Risu Raj | 2026
+        </p>
+
+    </div>
+</div>
+
+
 <footer class="bg-white/10 backdrop-blur-md border-t border-white/20 text-center py-4 text-sm text-gray-300">
-© 2026 AI Brain Tumor Detection Project
+© 2026 AI Brain Tumor Detection System -- Risu Raj
 </footer>
 
 <script>
@@ -167,6 +216,16 @@ analyzeBtn.addEventListener('click', async () => {
         loadingSection.classList.add('hidden');
     }
 });
+
+function showAbout() {
+    document.getElementById("homeSection").classList.add("hidden");
+    document.getElementById("aboutSection").classList.remove("hidden");
+}
+
+function showHome() {
+    document.getElementById("aboutSection").classList.add("hidden");
+    document.getElementById("homeSection").classList.remove("hidden");
+}
 
 function showPrediction(data) {
 

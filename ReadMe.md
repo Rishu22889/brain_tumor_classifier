@@ -1,8 +1,8 @@
 # 🧠 AI-Based Brain Tumor Detection System
 
-A Deep Learning web application that detects brain tumors from MRI scans using a Convolutional Neural Network (CNN) model deployed with Flask.
+A Deep Learning web application that detects brain tumors from MRI scans using a ResNet18-based Convolutional Neural Network (CNN) deployed with Flask.
 
-This project demonstrates end-to-end AI system development — from model training to web deployment.
+This project demonstrates end-to-end AI system development — from model training and evaluation to web deployment.
 
 ---
 
@@ -15,8 +15,6 @@ Brain tumors require early and accurate detection. This project builds an AI-bas
 - Pituitary Tumor
 - No Tumor
 
-### Dataset Link - https://drive.google.com/drive/folders/1Hvb9cOEZ5Ti_qpFPAAtjQOKC0IOnZnoz?usp=sharing
-
 The trained PyTorch model is integrated into a modern glass-themed web interface where users can upload MRI images and receive predictions along with confidence scores.
 
 ---
@@ -24,46 +22,55 @@ The trained PyTorch model is integrated into a modern glass-themed web interface
 ## 🏗 Tech Stack
 
 ### 🔹 Frontend
-- HTML5
-- Tailwind CSS
-- JavaScript
-- Glassmorphism UI Design
+
+* HTML5
+* Tailwind CSS
+* JavaScript
+* Glassmorphism UI Design
 
 ### 🔹 Backend
-- Flask (Python)
-- REST API (`/api/analyze`)
+
+* Flask (Python)
+* REST API (`/api/analyze`)
 
 ### 🔹 Machine Learning
-- PyTorch
-- Custom Convolutional Neural Network (CNN)
-- torchvision for image preprocessing
+
+* PyTorch
+* Transfer Learning (ResNet18 pretrained on ImageNet)
+* torchvision for image preprocessing
 
 ---
 
 ## 🧠 Model Architecture
 
-The model is a custom Convolutional Neural Network consisting of:
+Instead of training from scratch, this system uses **ResNet18 pretrained on ImageNet** and fine-tunes the final layers for MRI classification.
 
-- Convolutional layers for feature extraction
-- ReLU activation
-- MaxPooling layers
-- Fully connected layers
-- Softmax output for multi-class classification
+### Architecture Details
 
-### ⚙️ Training Details
+* Backbone: ResNet18 (Pretrained)
+* Final Layer: Modified Fully Connected layer (4 output classes)
+* Input Size: 224 × 224 RGB
+* Activation: ReLU
+* Output: Softmax (via CrossEntropyLoss)
 
-- Framework: PyTorch
-- Input Size: 224 × 224 RGB
-- Loss Function: CrossEntropyLoss
-- Optimizer: Adam
-- Output Classes: 4
+### Training Configuration
+
+* Framework: PyTorch
+* Loss Function: CrossEntropyLoss
+* Optimizer: Adam (lr = 0.0003)
+* Weight Decay: 1e-4
+* Epochs: 10
+* Batch Size: 32
+* Dataset Size: ~4000 training images
 
 ---
 
 ## 📊 Model Performance
 
-| Metric              | Value |
-|---------------------|--------|
+### 🔹 Overall Accuracy
+
+| Metric              | Value  |
+| ------------------- | ------ |
 | Training Accuracy   | 99.84% |
 | Validation Accuracy | 98.97% |
 
@@ -87,54 +94,63 @@ brain-tumor-detection/
 │   └── css/
 ├── requirements.txt
 └── README.md
-````
+
 ---
 
-## ⚙️ Installation & Setup
+## 📊 Model Evaluation Visualizations
 
-### 1️⃣ Clone Repository
+### 🔹 Confusion Matrix (Validation Set)
 
-```bash
-git clone https://github.com/your-username/brain-tumor-detection.git
-cd brain-tumor-detection
-````
+![Confusion Matrix](static/images/output.png)
 
-### 2️⃣ Create Virtual Environment
+The confusion matrix demonstrates strong class separation with minimal misclassification across all four categories:
 
-```bash
-python -m venv venv
-source venv/bin/activate        # Mac/Linux
-venv\Scripts\activate           # Windows
-```
+* Glioma
+* Meningioma
+* No Tumor
+* Pituitary Tumor
 
-### 3️⃣ Install Dependencies
+---
 
-```bash
-pip install -r requirements.txt
-```
+### 🔹 Performance Summary
 
-### 4️⃣ Run Application
+| Class      | Precision | Recall | F1 Score |
+| ---------- | --------- | ------ | -------- |
+| Glioma     | 1.0000    | 1.0000 | 1.0000   |
+| Meningioma | 0.9959    | 0.9796 | 0.9877   |
+| No Tumor   | 0.9965    | 1.0000 | 0.9982   |
+| Pituitary  | 0.9864    | 0.9966 | 0.9915   |
 
-```bash
-python app.py
-```
+These results indicate high model reliability with very low false positives and false negatives on the validation dataset.
 
-Open in browser:
+---
 
-```
-http://127.0.0.1:5000/
-```
+### Key Observations
+
+* High precision across all classes indicates low false positives.
+* High recall ensures tumor cases are rarely missed.
+* Only 1 tumor case was misclassified as no-tumor.
+* Minimal inter-class confusion between tumor subtypes.
 
 ---
 
 ## 🔬 How It Works
 
 1. User uploads MRI scan.
-2. Image is resized and normalized.
+2. Image is resized to 224×224 and normalized.
 3. Model performs forward pass.
-4. Softmax probabilities are calculated.
+4. Softmax probabilities are computed.
 5. Highest probability class is selected.
-6. Prediction and confidence score displayed in UI.
+6. Prediction and confidence score are displayed.
+
+---
+
+## ⚠️ Model Limitations
+
+* Trained on a single curated dataset.
+* External validation on multi-hospital data not performed.
+* Real-world performance may vary under domain shift.
+* Not optimized for clinical deployment.
 
 ---
 
@@ -164,19 +180,9 @@ It is NOT a substitute for professional medical diagnosis. Always consult qualif
 
 ---
 
-## 🔮 Future Improvements
-
-* Add class probability bar chart visualization
-* Add Grad-CAM for model explainability
-* Improve dataset size for better generalization
-* Deploy on cloud (AWS / Render / Azure)
-* Add user authentication and prediction history
-
----
-
 ## 👨‍💻 Author
 
-Developed as a deep learning deployment project to demonstrate practical AI model integration into a web application.
+Developed as a deep learning deployment project demonstrating transfer learning, evaluation metrics, and production-ready Flask integration.
 
 ---
 If you found this project useful, consider giving it a star ⭐
