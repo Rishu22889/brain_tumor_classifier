@@ -15,6 +15,8 @@ Brain tumors require early and accurate detection. This project builds an AI-bas
 - Pituitary Tumor
 - No Tumor
 
+📂 Dataset Link: [Click Here](https://drive.google.com/drive/folders/1Hvb9cOEZ5Ti_qpFPAAtjQOKC0IOnZnoz?usp=sharing)
+
 The trained PyTorch model is integrated into a modern glass-themed web interface where users can upload MRI images and receive predictions along with confidence scores.
 
 ---
@@ -95,13 +97,22 @@ brain-tumor-detection/
 ├── requirements.txt
 └── README.md
 
+```
+
 ---
 
 ## 📊 Model Evaluation Visualizations
 
+
+### 🔹 Website Prediction UI
+
+![Website Prediction UI](static/images/web5.png)
+
+
+
 ### 🔹 Confusion Matrix (Validation Set)
 
-![Confusion Matrix](static/images/output.png)
+![Confusion Matrix](static/images/metrix.png)
 
 The confusion matrix demonstrates strong class separation with minimal misclassification across all four categories:
 
