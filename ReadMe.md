@@ -179,4 +179,4 @@ Developed as a deep learning deployment project to demonstrate practical AI mode
 ---
 If you found this project useful, consider giving it a star ⭐
 
-```
+---
