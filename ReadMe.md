@@ -1,12 +1,3 @@
-Perfect. Now we’re doing it properly.
-
-Here is your **complete professional README.md in one single markdown file** — clean, structured, portfolio-ready.
-
-You can copy-paste this directly into `README.md`.
-
----
-
-```markdown
 # 🧠 AI-Based Brain Tumor Detection System
 
 A Deep Learning web application that detects brain tumors from MRI scans using a Convolutional Neural Network (CNN) model deployed with Flask.
