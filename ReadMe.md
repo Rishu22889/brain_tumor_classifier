@@ -85,7 +85,7 @@ brain-tumor-detection/
 │   └── css/
 ├── requirements.txt
 └── README.md
-
+````
 ---
 
 ## ⚙️ Installation & Setup
@@ -177,9 +177,6 @@ It is NOT a substitute for professional medical diagnosis. Always consult qualif
 Developed as a deep learning deployment project to demonstrate practical AI model integration into a web application.
 
 ---
-
-## ⭐ Support
-
 If you found this project useful, consider giving it a star ⭐
 
 ```
