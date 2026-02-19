@@ -1,1 +1,6 @@
 MRI-Images-of-Brain-Tumor/
+venv/
+venv_ml/
+__pycache__/
+*.pyc
+.DS_Store
