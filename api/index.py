@@ -63,5 +63,7 @@ def analyze():
         "confidence": confidence_score
     })
 
+app = app
+
 if __name__ == "__main__":
     app.run()
