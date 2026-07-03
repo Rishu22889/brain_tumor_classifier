@@ -5,7 +5,13 @@ from torchvision import transforms, models
 from flask import Flask, render_template, request, jsonify
 from PIL import Image
 
-app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "templates"),
+    static_folder=os.path.join(BASE_DIR, "static"),
+)
 
 device = torch.device("cpu")
 
@@ -21,8 +27,14 @@ class BrainTumorModel(nn.Module):
     def forward(self, x):
         return self.backbone(x)
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_PATH = os.path.join(BASE_DIR, "best_model.pth")
+
+print("Model path:", MODEL_PATH)
+print("Exists:", os.path.exists(MODEL_PATH))
+
 model = BrainTumorModel(num_classes=4)
-model.load_state_dict(torch.load("best_model.pth", map_location=device))
+model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
 model = model.to(device)
 model.eval()
 
